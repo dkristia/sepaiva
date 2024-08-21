@@ -81,7 +81,7 @@ function App() {
     );
     if (confirmation) {
       const today = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
-      fetch('http://dasuki.fi/updatesepaiva/', {
+      fetch('https://dasuki.fi/updatesepaiva/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
