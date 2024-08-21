@@ -3,25 +3,24 @@ import './App.css';
 
 function App() {
   const [odds, setOdds] = useState(0);
-  const [backendPaiva, setBackendPaiva] = useState('');
   const [backendPaivaDate, setBackendPaivaDate] = useState(new Date());
+
+  const todayDateOnly = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate());
 
   useEffect(() => {
     const fetchViimeSePaiva = async () => {
       const response = await fetch('https://dasuki.fi/sepaiva.txt');
       const data = await response.text();
-      setBackendPaiva(data);
-      setBackendPaivaDate(new Date(data));
+      const parsedDate = new Date(data);
+      setBackendPaivaDate(parsedDate);
+      setOdds(calculateOdds(todayDateOnly, parsedDate));
     }
 
     fetchViimeSePaiva();
-
-    setOdds(calculateOdds(new Date()));
   }, []);
 
-  const calculateOdds = (today: Date) => {
-    const viimeSePaiva = new Date(backendPaiva);
-    const daysSinceViimeSePaiva = Math.floor((today.getTime() - viimeSePaiva.getTime()) / (1000 * 60 * 60 * 24));
+  const calculateOdds = (today: Date, viimeSePaiva: Date) => {
+    const daysSinceViimeSePaiva = Math.round((today.getTime() - viimeSePaiva.getTime()) / (1000 * 60 * 60 * 24));
     if (daysSinceViimeSePaiva === 0) {
       return 100;
     } else if (today.getDay() === 3) {
@@ -117,15 +116,16 @@ function App() {
         <h1 className="title">"Se Päivä" -laskuri</h1>
       </div>
       <div className='app'>
+        <h2>Tänään on {todayDateOnly.toLocaleDateString("fi-FI")}</h2>
         <h2>Viime "se päivä" oli: {backendPaivaDate.toLocaleDateString("fi-FI")} ({backendPaivaDate.toLocaleDateString("fi-FI", { weekday: 'long' })}, {
-          Math.floor((new Date().getTime() - backendPaivaDate.getTime()) / (1000 * 60 * 60 * 24))
+          Math.round((todayDateOnly.getTime() - backendPaivaDate.getTime()) / (1000 * 60 * 60 * 24))
         } päivää sitten)</h2>
         <h2>Todennäköisin seuraava "se päivä" on {fiveWeeksFromBackendPaivaDate.toLocaleDateString("fi-FI")} (
           {
             fiveWeeksFromBackendPaivaDate.toLocaleDateString("fi-FI", { weekday: 'long' })
           }, {
-            Math.floor((-new Date().getTime() + fiveWeeksFromBackendPaivaDate.getTime()) / (1000 * 60 * 60 * 24))
-          } päivän päästä, {calculateOdds(fiveWeeksFromBackendPaivaDate)}% Dasuki arvio)</h2>
+            Math.round((-todayDateOnly.getTime() + fiveWeeksFromBackendPaivaDate.getTime()) / (1000 * 60 * 60 * 24))
+          } päivän päästä, {calculateOdds(fiveWeeksFromBackendPaivaDate, backendPaivaDate)}% Dasuki arvio)</h2>
         <div className='odds-box'>
           <p>Dasuki arvio tämän päivän 'se päivä' -todennäköisyydestä: {odds}%</p>
         </div>
