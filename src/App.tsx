@@ -16,64 +16,71 @@ function App() {
 
     fetchViimeSePaiva();
 
-    const calculateOdds = () => {
-      const today = new Date();
-      const viimeSePaiva = new Date(backendPaiva);
-      const daysSinceViimeSePaiva = Math.floor((today.getTime() - viimeSePaiva.getTime()) / (1000 * 60 * 60 * 24));
-      if (today.getDate === viimeSePaiva.getDate) {
-        return 100;
-      } else if (today.getDay() === 3) {
-        if (daysSinceViimeSePaiva < 7) {
-          return 2;
-        } else if (daysSinceViimeSePaiva < 14) {
-          return 5;
-        } else if (daysSinceViimeSePaiva < 21) {
-          return 10;
-        } else if (daysSinceViimeSePaiva < 28) {
-          return 20;
-        } else if (daysSinceViimeSePaiva < 35) {
-          return 65;
-        } else {
-          return 98;
-        }
+    setOdds(calculateOdds(new Date()));
+  }, []);
 
-      } else if (today.getDay() === 1) {
-        if (daysSinceViimeSePaiva < 5) {
-          return 1;
-        } else if (daysSinceViimeSePaiva < 12) {
-          return 2;
-        } else if (daysSinceViimeSePaiva < 19) {
-          return 5;
-        } else if (daysSinceViimeSePaiva < 26) {
-          return 10;
-        } else if (daysSinceViimeSePaiva < 33) {
-          return 20;
-        } else if (daysSinceViimeSePaiva < 40) {
-          return 30;
+  const calculateOdds = (today: Date) => {
+    const viimeSePaiva = new Date(backendPaiva);
+    const daysSinceViimeSePaiva = Math.floor((today.getTime() - viimeSePaiva.getTime()) / (1000 * 60 * 60 * 24));
+    if (daysSinceViimeSePaiva === 0) {
+      return 100;
+    } else if (today.getDay() === 3) {
+      if (daysSinceViimeSePaiva < 7) {
+        return 2;
+      } else if (daysSinceViimeSePaiva < 14) {
+        return 5;
+      } else if (daysSinceViimeSePaiva < 21) {
+        return 10;
+      } else if (daysSinceViimeSePaiva < 28) {
+        return 20;
+      } else if (daysSinceViimeSePaiva < 35) {
+        return 65;
+      } else {
+        return 98;
+      }
+
+    } else if (today.getDay() === 1) {
+      if (daysSinceViimeSePaiva < 5) {
+        return 1;
+      } else if (daysSinceViimeSePaiva < 12) {
+        return 2;
+      } else if (daysSinceViimeSePaiva < 19) {
+        return 5;
+      } else if (daysSinceViimeSePaiva < 26) {
+        return 10;
+      } else if (daysSinceViimeSePaiva < 33) {
+        return 20;
+      } else if (daysSinceViimeSePaiva < 40) {
+        return 30;
+      } else {
+        if (backendPaivaDate.getDay() === today.getDay()) {
+          return 85;
         } else {
           return 50;
         }
+      }
+    } else {
+      if (daysSinceViimeSePaiva < 7) {
+        return 0.1;
+      } else if (daysSinceViimeSePaiva < 14) {
+        return 0.2;
+      } else if (daysSinceViimeSePaiva < 21) {
+        return 0.5;
+      } else if (daysSinceViimeSePaiva < 28) {
+        return 1;
+      } else if (daysSinceViimeSePaiva < 35) {
+        return 2;
+      } else if (daysSinceViimeSePaiva < 42) {
+        return 10;
       } else {
-        if (daysSinceViimeSePaiva < 7) {
-          return 0.1;
-        } else if (daysSinceViimeSePaiva < 14) {
-          return 0.2;
-        } else if (daysSinceViimeSePaiva < 21) {
-          return 0.5;
-        } else if (daysSinceViimeSePaiva < 28) {
-          return 1;
-        } else if (daysSinceViimeSePaiva < 35) {
-          return 2;
-        } else if (daysSinceViimeSePaiva < 42) {
-          return 10;
+        if (backendPaivaDate.getDay() === today.getDay()) {
+          return 60;
         } else {
           return 20;
         }
       }
-    };
-
-    setOdds(calculateOdds());
-  }, []);
+    }
+  };
 
   const handleButtonClick = () => {
     const confirmation = window.confirm(
@@ -101,15 +108,24 @@ function App() {
     }
   };
 
+  const fiveWeeksFromBackendPaivaDate = new Date(backendPaivaDate);
+  fiveWeeksFromBackendPaivaDate.setDate(fiveWeeksFromBackendPaivaDate.getDate() + 35);
+
   return (
     <>
       <div className='top-bar'>
         <h1 className="title">"Se Päivä" -laskuri</h1>
       </div>
       <div className='app'>
-        <h2>Viime se päivä oli: {backendPaivaDate.toLocaleDateString("fi-FI")} ({backendPaivaDate.toLocaleDateString("fi-FI", { weekday: 'long' })}, {
+        <h2>Viime "se päivä" oli: {backendPaivaDate.toLocaleDateString("fi-FI")} ({backendPaivaDate.toLocaleDateString("fi-FI", { weekday: 'long' })}, {
           Math.floor((new Date().getTime() - backendPaivaDate.getTime()) / (1000 * 60 * 60 * 24))
         } päivää sitten)</h2>
+        <h2>Todennäköisin seuraava "se päivä" on {fiveWeeksFromBackendPaivaDate.toLocaleDateString("fi-FI")} (
+          {
+            fiveWeeksFromBackendPaivaDate.toLocaleDateString("fi-FI", { weekday: 'long' })
+          }, {
+            Math.floor((-new Date().getTime() + fiveWeeksFromBackendPaivaDate.getTime()) / (1000 * 60 * 60 * 24))
+          } päivän päästä, {calculateOdds(fiveWeeksFromBackendPaivaDate)}% Dasuki arvio)</h2>
         <div className='odds-box'>
           <p>Dasuki arvio tämän päivän 'se päivä' -todennäköisyydestä: {odds}%</p>
         </div>
