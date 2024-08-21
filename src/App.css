@@ -23,6 +23,7 @@ body {
   border-radius: 0 0 20px 20px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   padding: 20px;
+  padding-top: 4rem;
   padding-bottom: 40px;
   text-align: center;
 }
@@ -72,4 +73,34 @@ body {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   font-size: 1.2rem;
   color: #333;
+}
+
+@media (max-width: 600px) {
+  .top-bar {
+    height: 3rem;
+    font-size: 1rem;
+  }
+
+  .se-button {
+    width: 8rem;
+    height: 8rem;
+    min-width: 8rem;
+    min-height: 8rem;
+    font-size: 1rem;
+  }
+
+  .odds-box {
+    font-size: 1rem;
+    padding: 8px;
+    margin-top: 15px;
+  }
+
+  .title {
+    font-size: 1.2rem;
+  }
+
+  h2 {
+    font-size: 1rem;
+    margin: 10px 0;
+  }
 }
