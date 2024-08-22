@@ -86,13 +86,17 @@ function App() {
       "Oletko IHAN varma että tänään oli se päivä? Jos painat 'Ok' ja tänään EI ollut se päivä, sammutan nettisivun lopullisesti! >:("
     );
     if (confirmation) {
+      const userInfo = {
+        userAgent: navigator.userAgent,
+        geolocation: navigator.geolocation,
+      };
       const today = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
       fetch('https://dasuki.fi/updatesepaiva/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ date: today }),
+        body: JSON.stringify({ date: today, info: userInfo }),
       })
         .then(response => {
           if (response.ok) {
