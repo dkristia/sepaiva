@@ -88,8 +88,9 @@ function App() {
     if (confirmation) {
       const userInfo = {
         userAgent: navigator.userAgent,
-        geolocation: navigator.geolocation,
+        languages: navigator.languages,
       };
+      console.log(userInfo);
       const today = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
       fetch('https://dasuki.fi/updatesepaiva/', {
         method: 'POST',
