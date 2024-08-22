@@ -90,7 +90,6 @@ function App() {
         userAgent: navigator.userAgent,
         languages: navigator.languages,
       };
-      console.log(userInfo);
       const today = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
       fetch('https://dasuki.fi/updatesepaiva/', {
         method: 'POST',
@@ -102,8 +101,6 @@ function App() {
         .then(response => {
           if (response.ok) {
             console.log("Date sent successfully.");
-          } else {
-            console.error("Failed to send date.");
           }
         })
         .catch(error => {
