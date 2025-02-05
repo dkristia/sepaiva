@@ -83,7 +83,7 @@ function App() {
 
   const handleButtonClick = () => {
     const confirmation = window.confirm(
-      "Oletko IHAN varma että tänään oli se päivä? Jos painat 'Ok' ja tänään EI ollut se päivä, sammutan nettisivun lopullisesti! >:("
+      "Oletko IHAN varma että tänään oli se päivä? Paina 'Ok' VAIN jos olet tänään nähnyt ranskalaisia perunoita tai makkaraa ruokalassa."
     );
     if (confirmation) {
       const userInfo = {
