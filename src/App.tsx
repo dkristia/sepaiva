@@ -9,7 +9,7 @@ function App() {
 
   useEffect(() => {
     const fetchViimeSePaiva = async () => {
-      const response = await fetch('https://dasuki.fi/sepaiva.txt');
+      const response = await fetch('https://dasuki.fi/api/sepaiva/get');
       const data = await response.text();
       const parsedDate = new Date(data);
       setBackendPaivaDate(parsedDate);
@@ -91,7 +91,7 @@ function App() {
         languages: navigator.languages,
       };
       const today = new Date().toISOString().split('T')[0]; // Format: YYYY-MM-DD
-      fetch('https://dasuki.fi/updatesepaiva/', {
+      fetch('https://dasuki.fi/api/sepaiva/change', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
